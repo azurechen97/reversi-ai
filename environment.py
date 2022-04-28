@@ -10,6 +10,8 @@ class Reversi:
         self.board[4][4] = 1
         self.board[3][4] = -1
         self.board[4][3] = -1
+        self.n_black = 2
+        self.n_white = 2
         self.black_move = True
     
     # def refresh_board(self):
@@ -56,6 +58,10 @@ class Reversi:
         #     self.black_pieces.append((i, j))
         # else:
         #     self.white_pieces.append((i, j))
+        if self.black_move:
+            self.n_black += 1
+        else:
+            self.n_white += 1
         self.black_move = not self.black_move
         self.print_board()
         return
