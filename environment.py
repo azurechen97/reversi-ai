@@ -45,7 +45,8 @@ class Reversi:
 
     def make_move(self,i,j):
         if not self.is_valid_move(i,j):
-            return "Not a valid move!"
+            print("Not a valid move!")
+            return
         self.board[i][j] = 1 if self.black_move else -1
         if self.black_move:
             self.black_pieces.append((i, j))
