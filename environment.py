@@ -3,8 +3,8 @@ import numpy as np
 class Reversi:
     def __init__(self) -> None:
         self.board = [[0 for _ in range(8)] for _ in range(8)]
-        self.black_pieces = [(3, 3), (4, 4)]
-        self.white_pieces = [(3, 4), (4, 3)]
+        self.black_pieces = {(3, 3), (4, 4)}
+        self.white_pieces = {(3, 4), (4, 3)}
         self.refresh_board()
         self.black_move = True
     
@@ -49,9 +49,9 @@ class Reversi:
             return
         self.board[i][j] = 1 if self.black_move else -1
         if self.black_move:
-            self.black_pieces.append((i, j))
+            self.black_pieces.add((i, j))
         else:
-            self.white_pieces.append((i, j))
+            self.white_pieces.add((i, j))
         self.black_move = not self.black_move
         self.print_board()
         return
