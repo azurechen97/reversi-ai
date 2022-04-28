@@ -28,13 +28,20 @@ class Reversi:
                     print(' ', end=' ')
             print()
 
-    def is_valid_move(self):
-        pass
+    def is_valid_move(self,i,j):
+        # out of bound
+        if i >= 8 or i < 0 or j >= 8 or j < 0:
+            return False
+        # overlapping
+        # cannot flip anything
+        return True
 
     def find_valid_moves(self):
         pass
 
     def make_move(self,i,j):
+        if not self.is_valid_move(i,j):
+            return "Not a valid move!"
         self.board[i][j] = 1 if self.black_move else -1
         if self.black_move:
             self.black_pieces.append((i, j))
@@ -42,6 +49,7 @@ class Reversi:
             self.white_pieces.append((i, j))
         self.black_move = not self.black_move
         self.print_board()
+        return
 
     def endgame(self):
         pass
