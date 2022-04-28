@@ -34,7 +34,7 @@ class Reversi:
             print("Out of bound!")
             return False
         # overlapping
-        if (i, j) in self.black_pieces or (i, j) in self.white_pieces:
+        if self.board[i][j]!=0:
             print("Overlapping!")
             return False
         # cannot flip anything
