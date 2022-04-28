@@ -31,8 +31,12 @@ class Reversi:
     def is_valid_move(self,i,j):
         # out of bound
         if i >= 8 or i < 0 or j >= 8 or j < 0:
+            print("Out of bound!")
             return False
         # overlapping
+        if (i, j) in self.black_pieces or (i, j) in self.white_pieces:
+            print("Overlapping!")
+            return False
         # cannot flip anything
         return True
 
