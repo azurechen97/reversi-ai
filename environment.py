@@ -3,23 +3,17 @@ import numpy as np
 class Reversi:
     def __init__(self) -> None:
         self.board = [[0 for _ in range(8)] for _ in range(8)]
-        # self.black_pieces = [(3, 3), (4, 4)]
-        # self.white_pieces = [(3, 4), (4, 3)]
-        # self.refresh_board()
-        self.board[3][3] = 1
-        self.board[4][4] = 1
-        self.board[3][4] = -1
-        self.board[4][3] = -1
-        self.n_black = 2
-        self.n_white = 2
+        self.black_pieces = [(3, 3), (4, 4)]
+        self.white_pieces = [(3, 4), (4, 3)]
+        self.refresh_board()
         self.black_move = True
     
-    # def refresh_board(self):
-    #     for p in self.black_pieces:
-    #         self.board[p[0]][p[1]] = 1
-    #     for p in self.white_pieces:
-    #         self.board[p[0]][p[1]] = -1
-    #     return self.board
+    def refresh_board(self):
+        for p in self.black_pieces:
+            self.board[p[0]][p[1]] = 1
+        for p in self.white_pieces:
+            self.board[p[0]][p[1]] = -1
+        return self.board
 
     def print_board(self):
         print(' '.join([' ']+[str(i) for i in range(8)]))
@@ -54,14 +48,10 @@ class Reversi:
             print("Not a valid move!")
             return
         self.board[i][j] = 1 if self.black_move else -1
-        # if self.black_move:
-        #     self.black_pieces.append((i, j))
-        # else:
-        #     self.white_pieces.append((i, j))
         if self.black_move:
-            self.n_black += 1
+            self.black_pieces.append((i, j))
         else:
-            self.n_white += 1
+            self.white_pieces.append((i, j))
         self.black_move = not self.black_move
         self.print_board()
         return
