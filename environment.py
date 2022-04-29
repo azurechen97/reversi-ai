@@ -28,14 +28,16 @@ class Reversi:
                     print(' ', end=' ')
             print()
 
-    def is_valid_move(self,i,j,can_flip):
+    def is_valid_move(self,i,j,can_flip=set(),hint=True):
         # out of bound
         if i >= 8 or i < 0 or j >= 8 or j < 0:
-            print("Out of bound!")
+            if hint:
+                print("Out of bound!")
             return False
         # overlapping
         if self.board[i,j]!=0:
-            print("Overlapping!")
+            if hint:
+                print("Overlapping!")
             return False
         # cannot flip anything
         # 180
@@ -47,7 +49,7 @@ class Reversi:
                 if self.board[i,j-k] == 0:
                     l = []
                 break
-        can_flip.extend(l)
+        can_flip.update(l)
 
         # 135
         l = []
@@ -58,7 +60,7 @@ class Reversi:
                 if self.board[i-k,j-k] == 0:
                     l = []
                 break
-        can_flip.extend(l)
+        can_flip.update(l)
 
         # 90
         l = []
@@ -69,7 +71,7 @@ class Reversi:
                 if self.board[i-k,j] == 0:
                     l = []
                 break
-        can_flip.extend(l)
+        can_flip.update(l)
 
         # 45
         l = []
@@ -80,7 +82,7 @@ class Reversi:
                 if self.board[i-k,j+k] == 0:
                     l = []
                 break
-        can_flip.extend(l)
+        can_flip.update(l)
 
         # 0
         l = []
@@ -91,7 +93,7 @@ class Reversi:
                 if self.board[i,j+k] == 0:
                     l = []
                 break
-        can_flip.extend(l)
+        can_flip.update(l)
 
         # -45
         l = []
@@ -102,7 +104,7 @@ class Reversi:
                 if self.board[i+k,j+k] == 0:
                     l = []
                 break
-        can_flip.extend(l)
+        can_flip.update(l)
 
         # -90
         l = []
@@ -113,7 +115,7 @@ class Reversi:
                 if self.board[i+k,j] == 0:
                     l = []
                 break
-        can_flip.extend(l)
+        can_flip.update(l)
 
         # -135
         l = []
@@ -124,20 +126,36 @@ class Reversi:
                 if self.board[i+k,j-k] == 0:
                     l = []
                 break
-        can_flip.extend(l)
+        can_flip.update(l)
         
         if len(can_flip) == 0:
-            print("Can\'t flip anything!")
+            if hint:
+                print("Can\'t flip anything!")
             return False
         return True
 
     def find_valid_moves(self):
-        pass
+        valid_moves = {}
+        searched = np.abs(self.board)
+        if self.current_player==1:
+            opponent_pieces = self.white_pieces
+        else:
+            opponent_pieces = self.black_pieces
+        for p in opponent_pieces:
+            for di in range(-1,2):
+                for dj in range(-1,2):
+                    if (di!=0 or dj!=0) and (0 <= p[0]+di < 8 and 0 <= p[1]+dj < 8):
+                        can_flip = set()
+                        if searched[p[0]+di,p[1]+dj]==0 and self.is_valid_move(p[0]+di, p[1]+dj,can_flip,hint=False):
+                            valid_moves[(p[0]+di, p[1]+dj)] = can_flip
+                            searched[p[0]+di, p[1]+dj] = 1
+        return valid_moves
 
-    def make_move(self,i,j):
-        can_flip = []
-        if not self.is_valid_move(i, j, can_flip):
-            print("Not a valid move!")
+    def make_move(self,i,j,hint=True):
+        can_flip = set()
+        if not self.is_valid_move(i, j, can_flip, hint):
+            if hint:
+                print("Not a valid move!")
             return
 
         self.board[i,j] = self.current_player
