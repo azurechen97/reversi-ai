@@ -186,12 +186,29 @@ class Reversi:
         self.print_board()
         return
 
+    def game_over(self):
+        print("Game over!")
+        self.game_end = True
+        if len(self.black_pieces) > len(self.white_pieces):
+            print("Black wins! {}:{}".format(
+                len(self.black_pieces), len(self.white_pieces)))
+        elif len(self.black_pieces) < len(self.white_pieces):
+            print("White wins! {}:{}".format(
+                len(self.black_pieces), len(self.white_pieces)))
+        else:
+            print("Draw! {}:{}".format(
+                len(self.black_pieces), len(self.white_pieces)))
+
     def play(self):
         if not self.game_end:
             print("Game start!")
             self.print_board()
             prev_valid = True
-            while len(self.black_pieces)+len(self.white_pieces) < 64:
+            while True:
+                if len(self.black_pieces)+len(self.white_pieces)>=64:
+                    self.game_over()
+                    break
+
                 if self.current_player==1:
                     print("Black's turn!")
                 else:
@@ -201,13 +218,14 @@ class Reversi:
                 if len(valid_moves) == 0:
                     print("No valid move!")
                     if not prev_valid:
+                        self.game_over()
                         break
                     prev_valid = False
                     self.current_player = -self.current_player
                     continue
                 prev_valid = True
 
-                print("Enter the coordinate of your move (i j/stop/hint): ")
+                print("Enter your move (i j) or command (pause/stop/hint):")
                 command = input()
                 try:
                     p = list(map(int, command.split()))
@@ -219,18 +237,11 @@ class Reversi:
                     if command == 'hint':
                         print(valid_moves)
                     elif command == 'stop':
+                        self.game_over()
+                        break
+                    elif command == 'pause':
                         break
                     else:
                         print("Not numbers!")
 
-        print("Game over!")
-        self.game_end = True
-        if len(self.black_pieces)>len(self.white_pieces):
-            print("Black wins! {}:{}".format(
-                len(self.black_pieces), len(self.white_pieces)))
-        elif len(self.black_pieces) < len(self.white_pieces):
-            print("White wins! {}:{}".format(
-                len(self.black_pieces), len(self.white_pieces)))
-        else:
-            print("Draw! {}:{}".format(
-                len(self.black_pieces), len(self.white_pieces)))
+        
