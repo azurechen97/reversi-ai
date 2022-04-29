@@ -1,10 +1,10 @@
 import numpy as np
 
 class Reversi:
-    def __init__(self, init_black={(3, 3), (4, 4)}, init_white={(3, 4), (4, 3)}) -> None:
+    def __init__(self, init_black={(3, 4), (4, 3)}, init_white={(3, 3), (4, 4)}) -> None:
         self.reset(init_black, init_white)
     
-    def reset(self, init_black={(3, 3), (4, 4)}, init_white={(3, 4), (4, 3)}):
+    def reset(self, init_black={(3, 4), (4, 3)}, init_white={(3, 3), (4, 4)}):
         self.board = np.zeros((8, 8), dtype=np.int8)
         self.black_pieces = init_black.copy()
         self.white_pieces = init_white.copy()
