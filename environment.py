@@ -50,10 +50,9 @@ class Reversi:
             if self.board[i,j-k] == -self.current_player:
                 l.append((i, j-k))
             else:
-                if self.board[i,j-k] == 0:
-                    l = []
+                if self.board[i,j-k] == self.current_player:
+                    can_flip.update(l)
                 break
-        can_flip.update(l)
 
         # 135
         l = []
@@ -61,10 +60,9 @@ class Reversi:
             if self.board[i-k,j-k] == -self.current_player:
                 l.append((i-k, j-k))
             else:
-                if self.board[i-k,j-k] == 0:
-                    l = []
+                if self.board[i-k,j-k] == self.current_player:
+                    can_flip.update(l)
                 break
-        can_flip.update(l)
 
         # 90
         l = []
@@ -72,10 +70,9 @@ class Reversi:
             if self.board[i-k,j] == -self.current_player:
                 l.append((i-k, j))
             else:
-                if self.board[i-k,j] == 0:
-                    l = []
+                if self.board[i-k,j] == self.current_player:
+                    can_flip.update(l)
                 break
-        can_flip.update(l)
 
         # 45
         l = []
@@ -83,10 +80,9 @@ class Reversi:
             if self.board[i-k,j+k] == -self.current_player:
                 l.append((i-k, j+k))
             else:
-                if self.board[i-k,j+k] == 0:
-                    l = []
+                if self.board[i-k,j+k] == self.current_player:
+                    can_flip.update(l)
                 break
-        can_flip.update(l)
 
         # 0
         l = []
@@ -94,10 +90,9 @@ class Reversi:
             if self.board[i,j+k] == -self.current_player:
                 l.append((i, j+k))
             else:
-                if self.board[i,j+k] == 0:
-                    l = []
+                if self.board[i, j+k] == self.current_player:
+                    can_flip.update(l)
                 break
-        can_flip.update(l)
 
         # -45
         l = []
@@ -105,10 +100,9 @@ class Reversi:
             if self.board[i+k,j+k] == -self.current_player:
                 l.append((i+k, j+k))
             else:
-                if self.board[i+k,j+k] == 0:
-                    l = []
+                if self.board[i+k, j+k] == self.current_player:
+                    can_flip.update(l)
                 break
-        can_flip.update(l)
 
         # -90
         l = []
@@ -116,10 +110,9 @@ class Reversi:
             if self.board[i+k,j] == -self.current_player:
                 l.append((i+k, j))
             else:
-                if self.board[i+k,j] == 0:
-                    l = []
+                if self.board[i+k,j] == self.current_player:
+                    can_flip.update(l)
                 break
-        can_flip.update(l)
 
         # -135
         l = []
@@ -127,10 +120,9 @@ class Reversi:
             if self.board[i+k,j-k] == -self.current_player:
                 l.append((i+k, j-k))
             else:
-                if self.board[i+k,j-k] == 0:
-                    l = []
+                if self.board[i+k, j-k] == self.current_player:
+                    can_flip.update(l)
                 break
-        can_flip.update(l)
         
         if len(can_flip) == 0:
             if hint:
@@ -202,7 +194,8 @@ class Reversi:
                     continue
                 prev_valid = True
 
-                command = input("Enter the coordinate of your move (i j): ")
+                print("Enter the coordinate of your move (i j/stop/hint): ")
+                command = input()
                 try:
                     p = list(map(int, command.split()))
                     if len(p) == 2:

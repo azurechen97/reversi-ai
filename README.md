@@ -2,15 +2,15 @@
 Course project for Learning in Games.
 
 ## TO-DO
-- [ ] Reversi environment (by 5/3)
+- [x] Reversi environment (by 5/3)
     - [x] Initialization
     - [x] Make move
     - [x] Print board
     - [x] Determine if it is a valid move
     - [x] Flip the pieces
     - [x] Find all valid moves
-    - [ ] Player vs Player
-    - [ ] Determine if it is endgame
+    - [x] Player vs Player
+    - [x] Determine if it is endgame
 - [ ] Simple AI (by 5/5)
     - [ ] Count flipped pieces
     - [ ] Find the move with most pieces converted
