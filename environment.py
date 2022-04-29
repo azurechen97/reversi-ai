@@ -264,3 +264,6 @@ class Reversi:
                         print("Not numbers!")
 
         
+if __name__ == "__main__":
+    reversi = Reversi()
+    reversi.play()
