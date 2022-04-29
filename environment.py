@@ -1,27 +1,42 @@
 import numpy as np
 
 class Reversi:
-    def __init__(self, init_black={(3, 4), (4, 3)}, init_white={(3, 3), (4, 4)}, init_board = None) -> None:
-        self.reset(init_black, init_white, init_board)
+    def __init__(self, size = 8, init_board = None) -> None:
+        # init_board can be a dict, with key 1 (black) and key -1 (white), and the values are sets contains the tuples of coordinates
+        # init_board can be a numpy array, with 1 (black), -1 (white), and 0 (not occupied)
+        self.size = size
+        self.reset(init_board)
     
-    def reset(self, init_black={(3, 4), (4, 3)}, init_white={(3, 3), (4, 4)}, init_board=None):
-        if init_board is not None:
+    # reset the game
+    def reset(self, init_board=None):    
+        if type(init_board) is dict and 1 in init_board and -1 in init_board:
+            self.black_pieces = init_board[1].copy()
+            self.white_pieces = init_board[-1].copy()
+            self.refresh_board()
+        elif type(init_board) is np.ndarray and init_board.shape == (self.size,self.size):
             self.board = init_board
             self.refresh_pieces()
         else:
-            self.black_pieces = init_black.copy()
-            self.white_pieces = init_white.copy()
+            self.black_pieces = {
+                (self.size//2, self.size//2-1), (self.size//2-1, self.size//2)}
+            self.white_pieces = {
+                (self.size//2-1, self.size//2-1), (self.size//2, self.size//2)}
             self.refresh_board()
+            
         self.current_player = 1
         self.game_end = False
 
+    # refresh the board with the sets of pieces
     def refresh_board(self):
-        self.board = np.zeros((8, 8), dtype=np.int8)
+        self.board = np.zeros((self.size, self.size), dtype=np.int8)
         for p in self.black_pieces:
-            self.board[p] = 1
+            if 0<=p[0]<self.size and 0<=p[1]<self.size:
+                self.board[p] = 1
         for p in self.white_pieces:
-            self.board[p] = -1
+            if 0 <= p[0] < self.size and 0 <= p[1] < self.size:
+                self.board[p] = -1
     
+    # refresh the sets of pieces with the board
     def refresh_pieces(self):
         self.black_pieces = set()
         self.white_pieces = set()
@@ -33,10 +48,10 @@ class Reversi:
             self.white_pieces.add((wp[k, 0], wp[k, 1]))
 
     def print_board(self):
-        print(' '.join([' ']+[str(i) for i in range(8)]))
-        for i in range(8):
+        print(' '.join([' ']+[str(i) for i in range(self.size)]))
+        for i in range(self.size):
             print(str(i), end=' ')
-            for j in range(8):
+            for j in range(self.size):
                 if self.board[i,j] == 1:
                     print('●', end=' ')
                 elif self.board[i,j] == -1:
@@ -45,9 +60,10 @@ class Reversi:
                     print(' ', end=' ')
             print()
 
+    # tell if a move is valid on the current board for current player
     def is_valid_move(self,i,j,can_flip=set(),hint=True):
         # out of bound
-        if i >= 8 or i < 0 or j >= 8 or j < 0:
+        if i >= self.size or i < 0 or j >= self.size or j < 0:
             if hint:
                 print("Out of bound!")
             return False
@@ -57,7 +73,7 @@ class Reversi:
                 print("Overlapping!")
             return False
         # cannot flip anything
-        # 180
+        # 180 degree
         l = []
         for k in range(1,j+1):
             if self.board[i,j-k] == -self.current_player:
@@ -67,7 +83,7 @@ class Reversi:
                     can_flip.update(l)
                 break
 
-        # 135
+        # 135 degree
         l = []
         for k in range(1, min(i+1,j+1)):
             if self.board[i-k,j-k] == -self.current_player:
@@ -77,7 +93,7 @@ class Reversi:
                     can_flip.update(l)
                 break
 
-        # 90
+        # 90 degree
         l = []
         for k in range(1, i+1):
             if self.board[i-k,j] == -self.current_player:
@@ -87,9 +103,9 @@ class Reversi:
                     can_flip.update(l)
                 break
 
-        # 45
+        # 45 degree
         l = []
-        for k in range(1, min(i+1, 8-j)):
+        for k in range(1, min(i+1, self.size-j)):
             if self.board[i-k,j+k] == -self.current_player:
                 l.append((i-k, j+k))
             else:
@@ -97,9 +113,9 @@ class Reversi:
                     can_flip.update(l)
                 break
 
-        # 0
+        # 0 degree
         l = []
-        for k in range(1, 8-j):
+        for k in range(1, self.size-j):
             if self.board[i,j+k] == -self.current_player:
                 l.append((i, j+k))
             else:
@@ -107,9 +123,9 @@ class Reversi:
                     can_flip.update(l)
                 break
 
-        # -45
+        # -45 degree
         l = []
-        for k in range(1, min(8-i, 8-j)):
+        for k in range(1, min(self.size-i, self.size-j)):
             if self.board[i+k,j+k] == -self.current_player:
                 l.append((i+k, j+k))
             else:
@@ -117,9 +133,9 @@ class Reversi:
                     can_flip.update(l)
                 break
 
-        # -90
+        # -90 degree
         l = []
-        for k in range(1, 8-i):
+        for k in range(1, self.size-i):
             if self.board[i+k,j] == -self.current_player:
                 l.append((i+k, j))
             else:
@@ -127,9 +143,9 @@ class Reversi:
                     can_flip.update(l)
                 break
 
-        # -135
+        # -135 degree
         l = []
-        for k in range(1, min(8-i, j+1)):
+        for k in range(1, min(self.size-i, j+1)):
             if self.board[i+k,j-k] == -self.current_player:
                 l.append((i+k, j-k))
             else:
@@ -143,6 +159,7 @@ class Reversi:
             return False
         return True
 
+    # find all valid moves on the current board for current player
     def find_valid_moves(self):
         valid_moves = {}
         searched = np.abs(self.board)
@@ -153,13 +170,14 @@ class Reversi:
         for p in opponent_pieces:
             for di in range(-1,2):
                 for dj in range(-1,2):
-                    if (di!=0 or dj!=0) and (0 <= p[0]+di < 8 and 0 <= p[1]+dj < 8):
+                    if (di != 0 or dj != 0) and (0 <= p[0]+di < self.size and 0 <= p[1]+dj < self.size):
                         can_flip = set()
                         if searched[p[0]+di,p[1]+dj]==0 and self.is_valid_move(p[0]+di, p[1]+dj,can_flip,hint=False):
                             valid_moves[(p[0]+di, p[1]+dj)] = can_flip
                             searched[p[0]+di, p[1]+dj] = 1
         return valid_moves
 
+    # make a move and flip the opponent's pieces
     def make_move(self,i,j,hint=True):
         can_flip = set()
         if not self.is_valid_move(i, j, can_flip, hint):
@@ -199,6 +217,7 @@ class Reversi:
             print("Draw! {}:{}".format(
                 len(self.black_pieces), len(self.white_pieces)))
 
+    # 
     def play(self):
         if not self.game_end:
             print("Game start!")

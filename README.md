@@ -11,6 +11,7 @@ Course project for Learning in Games.
     - [x] Find all valid moves
     - [x] Player vs Player
     - [x] Determine if it is endgame
+    - [x] Resize the board
 - [ ] Simple AI (by 5/5)
     - [ ] Count flipped pieces
     - [ ] Find the move with most pieces converted
