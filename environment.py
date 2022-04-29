@@ -1,23 +1,36 @@
 import numpy as np
 
 class Reversi:
-    def __init__(self, init_black={(3, 4), (4, 3)}, init_white={(3, 3), (4, 4)}) -> None:
-        self.reset(init_black, init_white)
+    def __init__(self, init_black={(3, 4), (4, 3)}, init_white={(3, 3), (4, 4)}, init_board = None) -> None:
+        self.reset(init_black, init_white, init_board)
     
-    def reset(self, init_black={(3, 4), (4, 3)}, init_white={(3, 3), (4, 4)}):
-        self.board = np.zeros((8, 8), dtype=np.int8)
-        self.black_pieces = init_black.copy()
-        self.white_pieces = init_white.copy()
-        self.refresh_board()
+    def reset(self, init_black={(3, 4), (4, 3)}, init_white={(3, 3), (4, 4)}, init_board=None):
+        if init_board is not None:
+            self.board = init_board
+            self.refresh_pieces()
+        else:
+            self.black_pieces = init_black.copy()
+            self.white_pieces = init_white.copy()
+            self.refresh_board()
         self.current_player = 1
         self.game_end = False
 
     def refresh_board(self):
+        self.board = np.zeros((8, 8), dtype=np.int8)
         for p in self.black_pieces:
             self.board[p] = 1
         for p in self.white_pieces:
             self.board[p] = -1
-        return self.board
+    
+    def refresh_pieces(self):
+        self.black_pieces = set()
+        self.white_pieces = set()
+        bp = np.argwhere(self.board == 1)
+        wp = np.argwhere(self.board == -1)
+        for k in range(bp.shape[0]):
+            self.black_pieces.add((bp[k, 0], bp[k, 1]))
+        for k in range(wp.shape[0]):
+            self.white_pieces.add((wp[k, 0], wp[k, 1]))
 
     def print_board(self):
         print(' '.join([' ']+[str(i) for i in range(8)]))
@@ -186,9 +199,9 @@ class Reversi:
 
                 valid_moves = self.find_valid_moves()
                 if len(valid_moves) == 0:
+                    print("No valid move!")
                     if not prev_valid:
                         break
-                    print("No valid move!")
                     prev_valid = False
                     self.current_player = -self.current_player
                     continue
