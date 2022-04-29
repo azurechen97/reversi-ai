@@ -1,13 +1,17 @@
 import numpy as np
 
 class Reversi:
-    def __init__(self, black_pieces={(3, 3), (4, 4)}, white_pieces={(3, 4), (4, 3)}) -> None:
+    def __init__(self, init_black={(3, 3), (4, 4)}, init_white={(3, 4), (4, 3)}) -> None:
+        self.reset(init_black, init_white)
+    
+    def reset(self, init_black={(3, 3), (4, 4)}, init_white={(3, 4), (4, 3)}):
         self.board = np.zeros((8, 8), dtype=np.int8)
-        self.black_pieces = black_pieces
-        self.white_pieces = white_pieces
+        self.black_pieces = init_black.copy()
+        self.white_pieces = init_white.copy()
         self.refresh_board()
         self.current_player = 1
-    
+        self.game_end = False
+
     def refresh_board(self):
         for p in self.black_pieces:
             self.board[p] = 1
@@ -177,5 +181,50 @@ class Reversi:
         self.print_board()
         return
 
-    def endgame(self):
-        pass
+    def play(self):
+        if not self.game_end:
+            print("Game start!")
+            self.print_board()
+            prev_valid = True
+            while len(self.black_pieces)+len(self.white_pieces) < 64:
+                if self.current_player==1:
+                    print("Black's turn!")
+                else:
+                    print("White's turn!")
+
+                valid_moves = self.find_valid_moves()
+                if len(valid_moves) == 0:
+                    if not prev_valid:
+                        break
+                    print("No valid move!")
+                    prev_valid = False
+                    self.current_player = -self.current_player
+                    continue
+                prev_valid = True
+
+                command = input("Enter the coordinate of your move (i j): ")
+                try:
+                    p = list(map(int, command.split()))
+                    if len(p) == 2:
+                        self.make_move(p[0], p[1])
+                    else:
+                        print("Need 2 numbers!")
+                except:
+                    if command == 'hint':
+                        print(valid_moves)
+                    elif command == 'stop':
+                        break
+                    else:
+                        print("Not numbers!")
+
+        print("Game over!")
+        self.game_end = True
+        if len(self.black_pieces)>len(self.white_pieces):
+            print("Black wins! {}:{}".format(
+                len(self.black_pieces), len(self.white_pieces)))
+        elif len(self.black_pieces) < len(self.white_pieces):
+            print("White wins! {}:{}".format(
+                len(self.black_pieces), len(self.white_pieces)))
+        else:
+            print("Draw! {}:{}".format(
+                len(self.black_pieces), len(self.white_pieces)))

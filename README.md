@@ -6,11 +6,12 @@ Course project for Learning in Games.
     - [x] Initialization
     - [x] Make move
     - [x] Print board
-    - [ ] Determine if it is a valid move
-    - [ ] Flip the pieces
+    - [x] Determine if it is a valid move
+    - [x] Flip the pieces
+    - [x] Find all valid moves
+    - [ ] Player vs Player
     - [ ] Determine if it is endgame
 - [ ] Simple AI (by 5/5)
-    - [ ] Find all valid moves
     - [ ] Count flipped pieces
     - [ ] Find the move with most pieces converted
 - [ ] Advanced AI (by 5/17)
