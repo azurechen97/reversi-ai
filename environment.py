@@ -216,53 +216,56 @@ class Reversi:
         else:
             print("Draw! {}:{}".format(
                 len(self.black_pieces), len(self.white_pieces)))
+        print("Reset? (y/n):")
+        if input() == 'y':
+            self.reset()
 
     def play(self):
         if self.game_end:
-            self.reset()
-
-        print("Game start!")
-        self.print_board()
-        prev_valid = True
-        while True:
-            if len(self.black_pieces)+len(self.white_pieces)>=64:
-                self.game_over()
-                break
-
-            if self.current_player==1:
-                print("Black's turn!")
-            else:
-                print("White's turn!")
-
-            valid_moves = self.find_valid_moves()
-            if len(valid_moves) == 0:
-                print("No valid move!")
-                if not prev_valid:
-                    self.game_over()
-                    break
-                prev_valid = False
-                self.current_player = -self.current_player
-                continue
+            self.game_over()
+        else:
+            print("Game start!")
+            self.print_board()
             prev_valid = True
-
-            print("Enter your move (i j) or command (pause/stop/hint):")
-            command = input()
-            try:
-                p = list(map(int, command.split()))
-                if len(p) == 2:
-                    self.make_move(p[0], p[1])
-                else:
-                    print("Need 2 numbers!")
-            except:
-                if command == 'hint':
-                    print(valid_moves)
-                elif command == 'stop':
+            while True:
+                if len(self.black_pieces)+len(self.white_pieces)>=64:
                     self.game_over()
                     break
-                elif command == 'pause':
-                    break
+
+                if self.current_player==1:
+                    print("Black's turn!")
                 else:
-                    print("Not numbers!")
+                    print("White's turn!")
+
+                valid_moves = self.find_valid_moves()
+                if len(valid_moves) == 0:
+                    print("No valid move!")
+                    if not prev_valid:
+                        self.game_over()
+                        break
+                    prev_valid = False
+                    self.current_player = -self.current_player
+                    continue
+                prev_valid = True
+
+                print("Enter your move (i j) or command (pause/stop/hint):")
+                command = input()
+                try:
+                    p = list(map(int, command.split()))
+                    if len(p) == 2:
+                        self.make_move(p[0], p[1])
+                    else:
+                        print("Need 2 numbers!")
+                except:
+                    if command == 'hint':
+                        print(valid_moves)
+                    elif command == 'stop':
+                        self.game_over()
+                        break
+                    elif command == 'pause':
+                        break
+                    else:
+                        print("Not numbers!")
 
         
 if __name__ == "__main__":
