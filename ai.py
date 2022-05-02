@@ -94,10 +94,8 @@ if __name__ == "__main__":
                 ai_color = -1
             elif player_color == 'w':
                 ai_color = 1
-            else:
-                ai_color = 0
         except:
-            ai_color = 0
+            pass
 
     ai = None
     while ai is None:
@@ -111,8 +109,6 @@ if __name__ == "__main__":
                 ai = NormalAI(ai_color)
             elif level == 3:
                 ai = HardAI(ai_color)
-            else:
-                pass
         except:
             pass
     
