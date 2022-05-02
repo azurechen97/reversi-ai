@@ -5,7 +5,7 @@ class ReversiAI:
     def __init__(self, ai_color=-1) -> None:
         self.ai_color = ai_color
 
-    def find_best_move(self, reversi=None):
+    def find_best_move(self, reversi, valid_moves=None):
         pass
 
     def play(self, reversi=None):
@@ -40,7 +40,7 @@ class ReversiAI:
                 prev_valid = True
 
                 if reversi.current_player == self.ai_color:
-                    best_move = self.find_best_move(reversi)
+                    best_move = self.find_best_move(reversi, valid_moves)
                     reversi.make_move(best_move[0], best_move[1])
                 else:
                     print("Enter your move (i j) or command (pause/stop/hint):")
@@ -62,6 +62,19 @@ class ReversiAI:
                         else:
                             print("Not numbers!")
         return reversi
+
+class ArtificialIdiot(ReversiAI):
+    def __init__(self, ai_color=-1) -> None:
+        super().__init__(ai_color)
+    
+    def find_best_move(self, reversi, valid_moves=None):
+        if valid_moves is None:
+            valid_moves = reversi.find_valid_moves()
+        return next(iter(valid_moves))
+
+class EasyAI(ReversiAI):
+    def __init__(self, ai_color=-1) -> None:
+        super().__init__(ai_color)
 
 class EasyAI(ReversiAI):
     def __init__(self, ai_color=-1) -> None:
