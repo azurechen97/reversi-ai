@@ -76,10 +76,6 @@ class EasyAI(ReversiAI):
     def __init__(self, ai_color=-1) -> None:
         super().__init__(ai_color)
 
-class EasyAI(ReversiAI):
-    def __init__(self, ai_color=-1) -> None:
-        super().__init__(ai_color)
-
 class NormalAI(ReversiAI):
     def __init__(self, ai_color=-1) -> None:
         super().__init__(ai_color)
@@ -87,3 +83,37 @@ class NormalAI(ReversiAI):
 class HardAI(ReversiAI):
     def __init__(self, ai_color=-1) -> None:
         super().__init__(ai_color)
+
+
+if __name__ == "__main__":
+    ai_color = 0
+    while ai_color == 0:
+        try:
+            player_color = input("What color do you want? (b/w):")
+            if player_color == 'b' or player_color == '':
+                ai_color = -1
+            elif player_color == 'w':
+                ai_color = 1
+            else:
+                ai_color = 0
+        except:
+            ai_color = 0
+
+    ai = None
+    while ai is None:
+        try:
+            level = int(input("Level (0-3):"))
+            if level == 0:
+                ai = ArtificialIdiot(ai_color)
+            elif level == 1:
+                ai = EasyAI(ai_color)
+            elif level == 2:
+                ai = NormalAI(ai_color)
+            elif level == 3:
+                ai = HardAI(ai_color)
+            else:
+                pass
+        except:
+            pass
+    
+    ai.play()

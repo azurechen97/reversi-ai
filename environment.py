@@ -23,7 +23,7 @@ class Reversi:
                 (self.size//2-1, self.size//2-1), (self.size//2, self.size//2)}
             self.refresh_board()
             
-        self.current_player = 1
+        self.current_player = 1 # 1=black, -1=white
         self.game_end = False
 
     # refresh the board with the sets of pieces
@@ -216,9 +216,10 @@ class Reversi:
         else:
             print("Draw! {}:{}".format(
                 len(self.black_pieces), len(self.white_pieces)))
-        print("Reset? (y/n):")
-        if input() == 'y':
-            self.reset()
+        # print("Reset? (y/n):")
+        # if input() == 'y':
+        #     self.reset()
+        self.reset()
 
     def play(self):
         if self.game_end:
@@ -267,7 +268,6 @@ class Reversi:
                     else:
                         print("Not numbers!")
 
-        
 if __name__ == "__main__":
     reversi = Reversi()
     reversi.play()
