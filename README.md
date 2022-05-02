@@ -32,3 +32,6 @@ Course project for Learning in Games.
     - [ ] Iterative deepening
     - [ ] Reinforcement learning
     - [ ] Graphic UI
+- [ ] Evaluation (by 5/24)
+    - [ ] Human vs AI
+    - [ ] AI vs AI
