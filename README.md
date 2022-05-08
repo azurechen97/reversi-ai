@@ -14,9 +14,9 @@ Course project for Learning in Games.
     - [x] Resize the board
 - [x] A(rtificial)I(diot) (by 5/5)
     - [x] Move randomly
-- [ ] Simple AI (by 5/5)
-    - [ ] Count flipped pieces
-    - [ ] Find the move with most pieces converted
+- [x] Simple AI (by 5/5)
+    - [x] Count flipped pieces
+    - [x] Find the move with most pieces converted
 - [ ] Advanced AI (by 5/17)
     - [ ] Evaluation
         - [ ] Number of pieces

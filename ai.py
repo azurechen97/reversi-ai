@@ -76,6 +76,16 @@ class EasyAI(ReversiAI):
     def __init__(self, ai_color=-1) -> None:
         super().__init__(ai_color)
 
+    def find_best_move(self, reversi, valid_moves=None):
+        if valid_moves is None:
+            valid_moves = reversi.find_valid_moves()
+        greedy_move = [None, -np.inf]
+        for k, v in valid_moves.items():
+            if len(v) > greedy_move[1]:
+                greedy_move[0] = k
+                greedy_move[1] = len(v)
+        return greedy_move[0]
+
 class NormalAI(ReversiAI):
     def __init__(self, ai_color=-1) -> None:
         super().__init__(ai_color)
