@@ -19,9 +19,9 @@ Course project for Learning in Games.
     - [x] Find the move with most pieces converted
 - [ ] Advanced AI (by 5/17)
     - [ ] Evaluation
-        - [ ] Number of pieces
-        - [ ] Position scores
-        - [ ] Possible moves
+        - [x] Number of pieces
+        - [x] Position scores
+        - [x] Possible moves
         - [ ] Stable pieces
         - [ ] Special situations
     - [ ] MinMax algorithm
