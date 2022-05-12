@@ -1,5 +1,8 @@
+import copy
+
 import numpy as np
 from environment import *
+from evaluation import score
 
 class ReversiAI:
     def __init__(self, ai_color=-1) -> None:
@@ -87,12 +90,78 @@ class EasyAI(ReversiAI):
         return greedy_move[0]
 
 class NormalAI(ReversiAI):
-    def __init__(self, ai_color=-1) -> None:
+    def __init__(self, ai_color=-1, search_depth=4) -> None:
         super().__init__(ai_color)
+        self.search_depth = search_depth
+
+    def find_best_move(self, reversi, valid_moves=None):
+        metrics = score()
+        tree = Tree(reversi, maximising_player=self.ai_color)
+        _, move = pruning(tree, metrics, depth=self.search_depth)
+        return move
 
 class HardAI(ReversiAI):
     def __init__(self, ai_color=-1) -> None:
         super().__init__(ai_color)
+
+class Tree:
+    def __init__(self, node, maximising_player, children=None, moves=None):
+        self.node = node
+        self.children = children
+        self.maximising_player = maximising_player
+        self.moves = moves
+
+    def __str__(self):
+        return f"Tree({', '.join(str(sub) for sub in self.children)})"
+
+def pruning(tree, metrics, alpha=float("-inf"), beta=float("+inf"), depth=4):
+    # if isinstance(tree, Terminal):
+    #     return tree.value
+    if depth == 0:
+        # reach the leaf node, evaluate leaf score
+        return metrics.eval(tree.node), None
+    else:
+        # append children to the node
+        num_try = 2
+
+        while num_try > 0:
+            valid_moves = tree.node.find_valid_moves()
+            if len(valid_moves) > 0:
+                children = []
+                moves = []
+                for move in valid_moves:
+                    new_node = copy.deepcopy(tree.node)
+                    new_node.make_move(move[0], move[1], trace=False)
+                    children.append(Tree(node=new_node,
+                                         maximising_player=-1*tree.maximising_player))
+                    moves.append(move)
+                tree.children = children
+                tree.moves = moves
+                break
+            else:
+                tree.node.current_player *= -1
+                num_try -= 1
+        if num_try == 0:
+            # game over, neither players can move
+            # can not add any child to current broad
+            # return the score
+            return metrics.eval(tree.node), None
+
+    val = float("-inf") if tree.maximising_player > 0 else float("+inf")
+    ret_m = None
+    for i, subtree in enumerate(tree.children):
+        sub_val, _ = pruning(subtree, metrics, alpha, beta, depth=depth-1)
+        if tree.maximising_player > 0:
+            val = max(val, sub_val)
+            alpha = max(alpha, sub_val)
+        else:
+            val = min(val, sub_val)
+            beta = min(beta, sub_val)
+        if sub_val == val:
+            ret_m = tree.moves[i]
+        if beta <= alpha:
+            break
+    return val, ret_m
 
 
 if __name__ == "__main__":

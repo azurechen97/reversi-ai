@@ -178,7 +178,7 @@ class Reversi:
         return valid_moves
 
     # make a move and flip the opponent's pieces
-    def make_move(self,i,j,hint=True):
+    def make_move(self, i, j, hint=True, trace=True):
         can_flip = set()
         if not self.is_valid_move(i, j, can_flip, hint):
             if hint:
@@ -201,7 +201,8 @@ class Reversi:
                 self.black_pieces.remove(p)
 
         self.current_player = -self.current_player
-        self.print_board()
+        if trace:
+            self.print_board()
         return
 
     def game_over(self):
