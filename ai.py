@@ -3,6 +3,7 @@ import copy
 import numpy as np
 from environment import *
 from evaluation import score
+import random
 
 class ReversiAI:
     def __init__(self, ai_color=-1) -> None:
@@ -74,7 +75,7 @@ class ArtificialIdiot(ReversiAI):
     def find_best_move(self, reversi, valid_moves=None):
         if valid_moves is None:
             valid_moves = reversi.find_valid_moves()
-        return next(iter(valid_moves))
+        return random.choice(list(valid_moves.keys()))
 
 class EasyAI(ReversiAI):
     def __init__(self, ai_color=-1) -> None:
@@ -83,12 +84,14 @@ class EasyAI(ReversiAI):
     def find_best_move(self, reversi, valid_moves=None):
         if valid_moves is None:
             valid_moves = reversi.find_valid_moves()
-        greedy_move = [None, -np.inf]
+        greedy_move = [[], -np.inf]
         for k, v in valid_moves.items():
             if len(v) > greedy_move[1]:
-                greedy_move[0] = k
+                greedy_move[0] = [k]
                 greedy_move[1] = len(v)
-        return greedy_move[0]
+            elif len(v) == greedy_move[1]:
+                greedy_move[0].append(k)
+        return random.choice(greedy_move[0])
 
 class NormalAI(ReversiAI):
     def __init__(self, ai_color=-1, search_depth=4) -> None:
