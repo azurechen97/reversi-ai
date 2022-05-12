@@ -25,6 +25,7 @@ class Reversi:
             
         self.current_player = 1 # 1=black, -1=white
         self.game_end = False
+        self.winner = None
 
     # refresh the board with the sets of pieces
     def refresh_board(self):
@@ -205,22 +206,25 @@ class Reversi:
             self.print_board()
         return
 
-    def game_over(self):
-        print("Game over!")
+    def game_over(self, hint=True):
+        if hint:
+            print("Game over!")
         self.game_end = True
         if len(self.black_pieces) > len(self.white_pieces):
-            print("Black wins! {}:{}".format(
-                len(self.black_pieces), len(self.white_pieces)))
+            if hint:
+                print("Black wins! {}:{}".format(
+                    len(self.black_pieces), len(self.white_pieces)))
+            self.winner = 1
         elif len(self.black_pieces) < len(self.white_pieces):
-            print("White wins! {}:{}".format(
-                len(self.black_pieces), len(self.white_pieces)))
+            if hint:
+                print("White wins! {}:{}".format(
+                    len(self.black_pieces), len(self.white_pieces)))
+            self.winner = -1
         else:
-            print("Draw! {}:{}".format(
-                len(self.black_pieces), len(self.white_pieces)))
-        # print("Reset? (y/n):")
-        # if input() == 'y':
-        #     self.reset()
-        self.reset()
+            if hint:
+                print("Draw! {}:{}".format(
+                    len(self.black_pieces), len(self.white_pieces)))
+            self.winner = 0
 
     def play(self):
         if self.game_end:
