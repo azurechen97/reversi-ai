@@ -45,6 +45,7 @@ class ReversiAI:
                 if reversi.current_player == self.ai_color:
                     best_move = self.find_best_move(reversi, valid_moves)
                     reversi.make_move(best_move[0], best_move[1])
+                    print("{} plays at ({},{}).".format("Black" if self.ai_color==1 else "White",best_move[0],best_move[1]))
                 else:
                     print("Enter your move (i j) or command (pause/stop/hint):")
                     command = input()
