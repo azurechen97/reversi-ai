@@ -11,13 +11,7 @@ class score:
         self.weight = weight
 
     def num_pieces(self, reversi):
-        '''
-        count the number of pieces for this player
-        :param board: ndarray
-        :param mycolor: -1 or 1
-        :return: score
-        '''
-        return np.sum(reversi.board) * reversi.current_player
+        return np.sum(reversi.board)
 
     def position_score(self, reversi, Vmap=None):
         if Vmap is None:
@@ -30,7 +24,7 @@ class score:
                                  [10, 1, 3, 2, 2, 3, 1, 10],
                                  [-25, -45, 1, 1, 1, 1, -45, -25],
                                  [500, -25, 10, 5, 5, 10, -25, 500]])
-                return np.sum(reversi.board * Vmap) * reversi.current_player
+                return np.sum(reversi.board * Vmap)
             else:
                 return 0
         else:
@@ -41,7 +35,7 @@ class score:
 
     def possible_moves(self, reversi):
         valid_move = reversi.find_valid_moves()
-        return len(valid_move)
+        return len(valid_move) * reversi.current_player
 
     def getstable(self, reversi):
         board = reversi.board
@@ -109,7 +103,7 @@ class score:
                 for k in range(jrange):
                     diag2full[sind1-j][sind2-j] = True
         stable[2] = sum(sum(np.logical_and(np.logical_and(np.logical_and(colfull, rowfull), diag1full), diag2full)))
-        return sum(stable)
+        return sum(stable) * reversi.current_player
 
     def eval(self, reversi):
         score_list = []
