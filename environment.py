@@ -161,10 +161,12 @@ class Reversi:
         return True
 
     # find all valid moves on the current board for current player
-    def find_valid_moves(self):
+    def find_valid_moves(self, player=None):
         valid_moves = {}
         searched = np.abs(self.board)
-        if self.current_player==1:
+        if player is None or player not in (-1,1):
+            player = self.current_player
+        if player == 1:
             opponent_pieces = self.white_pieces
         else:
             opponent_pieces = self.black_pieces
@@ -205,6 +207,13 @@ class Reversi:
         if trace:
             self.print_board()
         return
+    
+    def is_game_over(self):
+        if len(self.black_pieces)+len(self.white_pieces) >= 64:
+            return True
+        if len(self.find_valid_moves(player=1)) == 0 and len(self.find_valid_moves(player=-1)) == 0:
+            return True
+        return False
 
     def game_over(self, hint=True):
         if hint:
