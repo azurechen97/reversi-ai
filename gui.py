@@ -49,14 +49,14 @@ while True:
                         x, y = pygame.mouse.get_pos()
                         col = int((x-BOARDX)/CELLWIDTH)
                         row = int((y-BOARDY)/CELLHEIGHT)
-                        reversi.make_move(row, col, hint=False, trace=False)
+                        reversi.make_move(row, col, hint=True, trace=False)
             else:
                 valid_moves = reversi.find_valid_moves()
                 if len(valid_moves) == 0:
                     reversi.current_player = -reversi.current_player
                 else:
                     row, col = ai.find_best_move(reversi)
-                    reversi.make_move(row, col, hint=False, trace=False)
+                    reversi.make_move(row, col, hint=True, trace=False)
         
         windowSurface.fill(WHITE)
         windowSurface.blit(boardImage, boardRect, boardRect)

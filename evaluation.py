@@ -129,7 +129,7 @@ class ScoreAdvanced(Score):
         if reversi.is_game_over():
             if reversi.winner is None:
                 reversi.game_over(hint=False)
-            return reversi.current_player*1e6
+            return reversi.winner*1e6
             
         score_list = []
         for m in self.method:
