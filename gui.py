@@ -5,7 +5,6 @@ from ai import *
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
-FPS = 40
 
 CELLWIDTH = 60
 CELLHEIGHT = 60
@@ -25,14 +24,36 @@ blackImage = pygame.image.load('resources/black.png')
 blackRect = blackImage.get_rect()
 whiteImage = pygame.image.load('resources/white.png')
 whiteRect = whiteImage.get_rect()
+frameImage = pygame.image.load('resources/frame.png')
+frameRect = whiteImage.get_rect()
 
 basicFont = pygame.font.SysFont(None, 50)
+
+def draw_board(reversi, last_move=(-1,-1)):
+    windowSurface.fill(WHITE)
+    windowSurface.blit(boardImage, boardRect, boardRect)
+
+    for i, j in reversi.black_pieces:
+        rectDst = pygame.Rect(BOARDX+j*CELLWIDTH,
+                              BOARDY+i*CELLHEIGHT, CELLWIDTH, CELLHEIGHT)
+        windowSurface.blit(blackImage, rectDst, blackRect)
+    for i, j in reversi.white_pieces:
+        rectDst = pygame.Rect(BOARDX+j*CELLWIDTH,
+                              BOARDY+i*CELLHEIGHT, CELLWIDTH, CELLHEIGHT)
+        windowSurface.blit(whiteImage, rectDst, whiteRect)
+
+    if last_move != (-1,-1):
+        rectDst = pygame.Rect(BOARDX+last_move[1]*CELLWIDTH,
+                            BOARDY+last_move[0]*CELLHEIGHT, CELLWIDTH, CELLHEIGHT)
+        windowSurface.blit(frameImage, rectDst, frameRect)
 
 reversi = Reversi()
 ai = HardAI()
 
 windowSurface = pygame.display.set_mode((boardRect.width, boardRect.height))
 pygame.display.set_caption('Reversi by Aoxue and Song')
+
+last_move = (-1,-1)
 
 while True:
     for event in pygame.event.get():
@@ -50,6 +71,7 @@ while True:
                         col = int((x-BOARDX)/CELLWIDTH)
                         row = int((y-BOARDY)/CELLHEIGHT)
                         reversi.make_move(row, col, hint=True, trace=False)
+                        last_move = (row, col)
             else:
                 valid_moves = reversi.find_valid_moves()
                 if len(valid_moves) == 0:
@@ -57,26 +79,18 @@ while True:
                 else:
                     row, col = ai.find_best_move(reversi)
                     reversi.make_move(row, col, hint=True, trace=False)
-        
-        windowSurface.fill(WHITE)
-        windowSurface.blit(boardImage, boardRect, boardRect)
+                    last_move = (row, col)
 
-        for row, col in reversi.black_pieces:
-            rectDst = pygame.Rect(BOARDX+col*CELLWIDTH,
-                                  BOARDY+row*CELLHEIGHT, CELLWIDTH, CELLHEIGHT)
-            windowSurface.blit(blackImage, rectDst, blackRect)
-        for row, col in reversi.white_pieces:
-            rectDst = pygame.Rect(BOARDX+col*CELLWIDTH,
-                                  BOARDY+row*CELLHEIGHT, CELLWIDTH, CELLHEIGHT)
-            windowSurface.blit(whiteImage, rectDst, whiteRect)
+        draw_board(reversi, last_move)
+        pygame.display.flip()
         
         if reversi.is_game_over():
             reversi.game_end = True
             if len(reversi.black_pieces) > len(reversi.white_pieces):
-                outputStr = "Black Wins!"
+                outputStr = "You Win!"
                 reversi.winner = 1
             elif len(reversi.black_pieces) < len(reversi.white_pieces):
-                outputStr = "White Wins!"
+                outputStr = "You Lose!"
                 reversi.winner = -1
             else:
                 outputStr = "Draw!"
@@ -87,6 +101,18 @@ while True:
             textRect.centerx = windowSurface.get_rect().centerx
             textRect.centery = windowSurface.get_rect().centery
             windowSurface.blit(text, textRect)
-
-        pygame.display.update()
-        mainClock.tick(FPS)
+            pygame.display.flip()
+            pause = True
+            while pause:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pause = False
+                        terminate()
+                    elif event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_SPACE:
+                            reversi.reset()
+                            last_move = (-1, -1)
+                            draw_board(reversi, last_move)
+                            pygame.display.flip()
+                            pause = False
+            
