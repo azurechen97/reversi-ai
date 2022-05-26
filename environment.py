@@ -62,7 +62,9 @@ class Reversi:
             print()
 
     # tell if a move is valid on the current board for current player
-    def is_valid_move(self,i,j,can_flip=set(),hint=True):
+    def is_valid_move(self, i, j, player=None, can_flip=set(), hint=True):
+        if player is None or player not in (-1, 1):
+            player = self.current_player
         # out of bound
         if i >= self.size or i < 0 or j >= self.size or j < 0:
             if hint:
@@ -77,80 +79,80 @@ class Reversi:
         # 180 degree
         l = []
         for k in range(1,j+1):
-            if self.board[i,j-k] == -self.current_player:
+            if self.board[i, j-k] == -player:
                 l.append((i, j-k))
             else:
-                if self.board[i,j-k] == self.current_player:
+                if self.board[i, j-k] == player:
                     can_flip.update(l)
                 break
 
         # 135 degree
         l = []
         for k in range(1, min(i+1,j+1)):
-            if self.board[i-k,j-k] == -self.current_player:
+            if self.board[i-k, j-k] == -player:
                 l.append((i-k, j-k))
             else:
-                if self.board[i-k,j-k] == self.current_player:
+                if self.board[i-k, j-k] == player:
                     can_flip.update(l)
                 break
 
         # 90 degree
         l = []
         for k in range(1, i+1):
-            if self.board[i-k,j] == -self.current_player:
+            if self.board[i-k,j] == -player:
                 l.append((i-k, j))
             else:
-                if self.board[i-k,j] == self.current_player:
+                if self.board[i-k, j] == player:
                     can_flip.update(l)
                 break
 
         # 45 degree
         l = []
         for k in range(1, min(i+1, self.size-j)):
-            if self.board[i-k,j+k] == -self.current_player:
+            if self.board[i-k,j+k] == -player:
                 l.append((i-k, j+k))
             else:
-                if self.board[i-k,j+k] == self.current_player:
+                if self.board[i-k, j+k] == player:
                     can_flip.update(l)
                 break
 
         # 0 degree
         l = []
         for k in range(1, self.size-j):
-            if self.board[i,j+k] == -self.current_player:
+            if self.board[i,j+k] == -player:
                 l.append((i, j+k))
             else:
-                if self.board[i, j+k] == self.current_player:
+                if self.board[i, j+k] == player:
                     can_flip.update(l)
                 break
 
         # -45 degree
         l = []
         for k in range(1, min(self.size-i, self.size-j)):
-            if self.board[i+k,j+k] == -self.current_player:
+            if self.board[i+k,j+k] == -player:
                 l.append((i+k, j+k))
             else:
-                if self.board[i+k, j+k] == self.current_player:
+                if self.board[i+k, j+k] == player:
                     can_flip.update(l)
                 break
 
         # -90 degree
         l = []
         for k in range(1, self.size-i):
-            if self.board[i+k,j] == -self.current_player:
+            if self.board[i+k,j] == -player:
                 l.append((i+k, j))
             else:
-                if self.board[i+k,j] == self.current_player:
+                if self.board[i+k, j] == player:
                     can_flip.update(l)
                 break
 
         # -135 degree
         l = []
         for k in range(1, min(self.size-i, j+1)):
-            if self.board[i+k,j-k] == -self.current_player:
+            if self.board[i+k,j-k] == -player:
                 l.append((i+k, j-k))
             else:
-                if self.board[i+k, j-k] == self.current_player:
+                if self.board[i+k, j-k] == player:
                     can_flip.update(l)
                 break
         
@@ -175,7 +177,7 @@ class Reversi:
                 for dj in range(-1,2):
                     if (di != 0 or dj != 0) and (0 <= p[0]+di < self.size and 0 <= p[1]+dj < self.size):
                         can_flip = set()
-                        if searched[p[0]+di,p[1]+dj]==0 and self.is_valid_move(p[0]+di, p[1]+dj,can_flip,hint=False):
+                        if searched[p[0]+di,p[1]+dj]==0 and self.is_valid_move(p[0]+di, p[1]+dj, player, can_flip, hint=False):
                             valid_moves[(p[0]+di, p[1]+dj)] = can_flip
                             searched[p[0]+di, p[1]+dj] = 1
         return valid_moves
@@ -183,7 +185,7 @@ class Reversi:
     # make a move and flip the opponent's pieces
     def make_move(self, i, j, hint=True, trace=True):
         can_flip = set()
-        if not self.is_valid_move(i, j, can_flip, hint):
+        if not self.is_valid_move(i, j, can_flip=can_flip, hint=hint):
             if hint:
                 print("Not a valid move!")
             return
