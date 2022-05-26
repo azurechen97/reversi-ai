@@ -2,7 +2,7 @@ import copy
 
 import numpy as np
 from environment import *
-from evaluation import score
+from evaluation import Score, ScoreAdvanced
 import random
 
 class ReversiAI:
@@ -99,14 +99,21 @@ class NormalAI(ReversiAI):
         self.search_depth = search_depth
 
     def find_best_move(self, reversi, valid_moves=None):
-        metrics = score()
+        metrics = Score()
         tree = Tree(reversi, maximizing_player=self.ai_color)
         _, move = pruning(tree, metrics, depth=self.search_depth)
         return move
 
 class HardAI(ReversiAI):
-    def __init__(self, ai_color=-1) -> None:
+    def __init__(self, ai_color=-1, search_depth=4) -> None:
         super().__init__(ai_color)
+        self.search_depth = search_depth
+
+    def find_best_move(self, reversi, valid_moves=None):
+        metrics = ScoreAdvanced()
+        tree = Tree(reversi, maximizing_player=self.ai_color)
+        _, move = pruning(tree, metrics, depth=self.search_depth)
+        return move
 
 class Tree:
     def __init__(self, node, maximizing_player, children=None, moves=None):

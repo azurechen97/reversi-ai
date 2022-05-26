@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class score:
+class Score:
     def __init__(self, method:list = None, weight:list = None):
         if method is not None and method is not None:
             assert len(method) == len(weight), 'Method and weight should have the same length'
@@ -106,6 +106,31 @@ class score:
         return sum(stable) * reversi.current_player
 
     def eval(self, reversi):
+        score_list = []
+        for m in self.method:
+            score_list.append(eval('self.'+m)(reversi))
+        if self.weight is None:
+            return np.sum(score_list)
+        else:
+            ret = 0
+            for w, s in zip(self.weight, score_list):
+                ret += w * s
+            return ret
+
+class ScoreAdvanced(Score):
+    def __init__(self, method: list = None, weight: list = None) -> None:
+        super().__init__(method, weight)
+    
+    def possible_moves(self, reversi):
+        valid_move = reversi.find_valid_moves()
+        return -1/(len(valid_move)+1e-5) * reversi.current_player
+    
+    def eval(self, reversi):
+        if reversi.is_game_over():
+            if reversi.winner is None:
+                reversi.game_over(hint=False)
+            return reversi.current_player*1e6
+            
         score_list = []
         for m in self.method:
             score_list.append(eval('self.'+m)(reversi))

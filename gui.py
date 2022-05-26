@@ -29,7 +29,7 @@ whiteRect = whiteImage.get_rect()
 basicFont = pygame.font.SysFont(None, 50)
 
 reversi = Reversi()
-ai = NormalAI()
+ai = HardAI()
 
 windowSurface = pygame.display.set_mode((boardRect.width, boardRect.height))
 pygame.display.set_caption('Reversi by Aoxue and Song')
