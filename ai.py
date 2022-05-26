@@ -137,7 +137,7 @@ def pruning(tree, metrics, alpha=float("-inf"), beta=float("+inf"), depth=4):
                     new_node = copy.deepcopy(tree.node)
                     new_node.make_move(move[0], move[1], trace=False)
                     children.append(Tree(node=new_node,
-                                         maximizing_player=-1*tree.maximizing_player))
+                                         maximizing_player=tree.maximizing_player * (-1)**(num_try+1)))
                     moves.append(move)
                 tree.children = children
                 tree.moves = moves
