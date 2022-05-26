@@ -42,6 +42,8 @@ class Score:
         color = reversi.current_player
         # function copied from https://zhuanlan.zhihu.com/p/35121997
         # 角、边、8个方向 都无空位的稳定子
+
+        # TO-DO: Change it to be applicable to board smaller than 8
         stable = [0,0,0]
 
         cind1 = [0,0,7,7]

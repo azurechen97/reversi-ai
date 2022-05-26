@@ -53,7 +53,7 @@ def ai_vs_ai(ai1, ai2, reversi=None, round_num=100, verbose=0):
                 best_move[0], best_move[1], verbose > 1, verbose > 2)
             if verbose > 1:
                 print("{} plays at ({},{}).".format(
-                    "Black" if reversi.current_player == 1 else "White", best_move[0], best_move[1]))
+                    "Black" if reversi.current_player == -1 else "White", best_move[0], best_move[1]))
         if reversi.winner == 1:
             black_win += 1
         elif reversi.winner == -1:
