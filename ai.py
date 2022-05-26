@@ -94,23 +94,27 @@ class EasyAI(ReversiAI):
         return random.choice(greedy_move[0])
 
 class NormalAI(ReversiAI):
-    def __init__(self, ai_color=-1, search_depth=4) -> None:
+    def __init__(self, ai_color=-1, search_depth=4, score_method = ['num_pieces', 'position_score', 'possible_moves', 'getstable'], score_weight = [0, 1, 20, 10]) -> None:
         super().__init__(ai_color)
         self.search_depth = search_depth
+        self.score_method = score_method
+        self.score_weight = score_weight
 
     def find_best_move(self, reversi, valid_moves=None):
-        metrics = Score()
+        metrics = Score(self.score_method, self.score_weight)
         tree = Tree(reversi, maximizing_player=self.ai_color)
         _, move = pruning(tree, metrics, depth=self.search_depth)
         return move
 
 class HardAI(ReversiAI):
-    def __init__(self, ai_color=-1, search_depth=4) -> None:
+    def __init__(self, ai_color=-1, search_depth=4, score_method=['num_pieces', 'position_score', 'possible_moves', 'getstable'], score_weight=[0, 1, 20, 10]) -> None:
         super().__init__(ai_color)
         self.search_depth = search_depth
+        self.score_method = score_method
+        self.score_weight = score_weight
 
     def find_best_move(self, reversi, valid_moves=None):
-        metrics = ScoreAdvanced()
+        metrics = ScoreAdvanced(self.score_method, self.score_weight)
         tree = Tree(reversi, maximizing_player=self.ai_color)
         _, move = pruning_advanced(tree, metrics, depth=self.search_depth)
         return move
@@ -206,6 +210,7 @@ def pruning_advanced(tree, metrics, alpha=float("-inf"), beta=float("+inf"), dep
             new_node.current_player = -new_node.current_player
             children.append(Tree(node=new_node,
                                      maximizing_player=-tree.maximizing_player))
+            moves.append(None)
         tree.children = children
         tree.moves = moves
 

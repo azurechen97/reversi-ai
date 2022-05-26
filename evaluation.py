@@ -118,7 +118,7 @@ class Score:
             return ret
 
 class ScoreAdvanced(Score):
-    def __init__(self, method: list = None, weight: list = (0,1,20,20)) -> None:
+    def __init__(self, method: list = None, weight: list = None) -> None:
         super().__init__(method, weight)
     
     def possible_moves(self, reversi):
