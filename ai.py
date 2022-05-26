@@ -112,7 +112,7 @@ class HardAI(ReversiAI):
     def find_best_move(self, reversi, valid_moves=None):
         metrics = ScoreAdvanced()
         tree = Tree(reversi, maximizing_player=self.ai_color)
-        _, move = pruning(tree, metrics, depth=self.search_depth)
+        _, move = pruning_advanced(tree, metrics, depth=self.search_depth)
         return move
 
 class Tree:
@@ -157,6 +157,57 @@ def pruning(tree, metrics, alpha=float("-inf"), beta=float("+inf"), depth=4):
             # can not add any child to current broad
             # return the score
             return metrics.eval(tree.node), None
+
+    val = float("-inf") if tree.maximizing_player > 0 else float("+inf")
+    ret_m = None
+    for i, subtree in enumerate(tree.children):
+        sub_val, _ = pruning(subtree, metrics, alpha, beta, depth=depth-1)
+        if tree.maximizing_player > 0:
+            val = max(val, sub_val)
+            alpha = max(alpha, sub_val)
+        else:
+            val = min(val, sub_val)
+            beta = min(beta, sub_val)
+        if sub_val == val:
+            ret_m = tree.moves[i]
+        if beta <= alpha:
+            break
+    return val, ret_m
+
+
+def pruning_advanced(tree, metrics, alpha=float("-inf"), beta=float("+inf"), depth=4):
+    # if isinstance(tree, Terminal):
+    #     return tree.value
+    if depth == 0:
+        # reach the leaf node, evaluate leaf score
+        return metrics.eval(tree.node), None
+    else:
+        if tree.node.is_game_over():
+            # game over, neither players can move
+            # can not add any child to current broad
+            # return the score
+            if tree.node.winner is None:
+                tree.node.game_over(hint=False)
+            return metrics.eval(tree.node), None
+
+        # append children to the node
+        valid_moves = tree.node.find_valid_moves()
+        children = []
+        moves = []
+        if len(valid_moves) > 0:
+            for move in valid_moves:
+                new_node = copy.deepcopy(tree.node)
+                new_node.make_move(move[0], move[1], trace=False)
+                children.append(Tree(node=new_node,
+                                        maximizing_player=-tree.maximizing_player))
+                moves.append(move)
+        else:
+            new_node = copy.deepcopy(tree.node)
+            new_node.current_player = -new_node.current_player
+            children.append(Tree(node=new_node,
+                                     maximizing_player=-tree.maximizing_player))
+        tree.children = children
+        tree.moves = moves
 
     val = float("-inf") if tree.maximizing_player > 0 else float("+inf")
     ret_m = None

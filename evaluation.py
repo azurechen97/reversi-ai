@@ -118,12 +118,14 @@ class Score:
             return ret
 
 class ScoreAdvanced(Score):
-    def __init__(self, method: list = None, weight: list = None) -> None:
+    def __init__(self, method: list = None, weight: list = (0,1,20,20)) -> None:
         super().__init__(method, weight)
     
-    # def possible_moves(self, reversi):
-    #     valid_move = reversi.find_valid_moves()
-    #     return -1/(len(valid_move)+1e-5) * reversi.current_player
+    def possible_moves(self, reversi):
+        valid_move = reversi.find_valid_moves()
+        if len(valid_move) == 0:
+            return -10000 * reversi.current_player
+        return len(valid_move) * reversi.current_player
     
     def eval(self, reversi):
         if reversi.is_game_over():
