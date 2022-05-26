@@ -28,8 +28,8 @@ class Score:
             else:
                 return 0
         else:
-            if len(reversi.board) == len(Vmap):
-                return np.sum(reversi.board * Vmap) * reversi.current_player
+            if reversi.board.shape == Vmap.shape:
+                return np.sum(reversi.board * Vmap)
             else:
                 raise ValueError('Input Vmap should have the same shape with board')
 
