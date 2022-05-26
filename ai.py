@@ -217,7 +217,7 @@ def pruning_advanced(tree, metrics, alpha=float("-inf"), beta=float("+inf"), dep
     val = float("-inf") if tree.maximizing_player > 0 else float("+inf")
     ret_m = None
     for i, subtree in enumerate(tree.children):
-        sub_val, _ = pruning(subtree, metrics, alpha, beta, depth=depth-1)
+        sub_val, _ = pruning_advanced(subtree, metrics, alpha, beta, depth=depth-1)
         if tree.maximizing_player > 0:
             val = max(val, sub_val)
             alpha = max(alpha, sub_val)
