@@ -23,7 +23,7 @@ Course project for Learning in Games.
         - [x] Position scores
         - [x] Possible moves
         - [x] Stable pieces
-        - [ ] Special situations
+        - [x] Special situations
     - [x] MinMax algorithm
     - [x] Alpha-Beta pruning
 - [ ] More advanced features (by 5/24)
@@ -31,7 +31,9 @@ Course project for Learning in Games.
     - [ ] Killer moves
     - [ ] Iterative deepening
     - [ ] Reinforcement learning
-    - [ ] Graphic UI
-- [ ] Performance evaluation (by 5/24)
-    - [ ] Human vs AI
-    - [ ] AI vs AI
+    - [x] Graphic UI
+- [x] Performance evaluation (by 5/24)
+    - [x] Human vs AI
+    - [x] AI vs AI
+    - [x] Branching factors
+    - [x] Search depth
