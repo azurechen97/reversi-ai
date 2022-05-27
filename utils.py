@@ -1,6 +1,6 @@
 from ai import *
 from environment import *
-
+import random
 
 def ai_vs_ai(ai1, ai2, reversi=None, round_num=100, random_turn=0, verbose=0):
     # verbose = 0: Nothing
@@ -68,7 +68,6 @@ def ai_vs_ai(ai1, ai2, reversi=None, round_num=100, random_turn=0, verbose=0):
     return black_win, white_win, round_num-black_win-white_win
 
 def randomize_board(reversi, turn=8):
-    ai_random = ArtificialIdiot()
     prev_valid = True
     for _ in range(turn):
         if len(reversi.black_pieces)+len(reversi.white_pieces) >= 64:
@@ -85,8 +84,14 @@ def randomize_board(reversi, turn=8):
             continue
         prev_valid = True
 
-        best_move = ai_random.find_best_move(reversi, valid_moves)
+        best_move = random.choice(list(valid_moves.keys()))
 
         reversi.make_move(
             best_move[0], best_move[1], False, False)
     return reversi
+
+def shuffle_two_lists(a,b):
+    c = list(zip(a, b))
+    random.shuffle(c)
+    a, b = zip(*c)
+    return a, b
