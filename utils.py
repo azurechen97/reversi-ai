@@ -64,3 +64,27 @@ def ai_vs_ai(ai1, ai2, reversi=None, round_num=100, verbose=0):
         print("Black:White:Draw={}:{}:{}".format(black_win,white_win,round_num-black_win-white_win))
     
     return black_win, white_win, round_num-black_win-white_win
+
+def randomize_board(reversi, turn=8):
+    ai_random = ArtificialIdiot()
+    prev_valid = True
+    for _ in range(turn):
+        if len(reversi.black_pieces)+len(reversi.white_pieces) >= 64:
+            reversi.game_over(hint=False)
+            break
+
+        valid_moves = reversi.find_valid_moves()
+        if len(valid_moves) == 0:
+            if not prev_valid:
+                reversi.game_over(hint=False)
+                break
+            prev_valid = False
+            reversi.current_player = -reversi.current_player
+            continue
+        prev_valid = True
+
+        best_move = ai_random.find_best_move(reversi, valid_moves)
+
+        reversi.make_move(
+            best_move[0], best_move[1], False, False)
+    return reversi
