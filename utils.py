@@ -2,7 +2,7 @@ from ai import *
 from environment import *
 
 
-def ai_vs_ai(ai1, ai2, reversi=None, round_num=100, verbose=0):
+def ai_vs_ai(ai1, ai2, reversi=None, round_num=100, random_turn=0, verbose=0):
     # verbose = 0: Nothing
     # verbose = 1: Round number, result
     # verbose = 2: Detailed moves
@@ -14,6 +14,8 @@ def ai_vs_ai(ai1, ai2, reversi=None, round_num=100, verbose=0):
     white_win = 0
 
     for i in range(round_num):
+        if random_turn>0:
+            randomize_board(reversi, turn=random_turn)
         if verbose>0:
             print("Round",i)
         if verbose>1:
