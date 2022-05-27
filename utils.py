@@ -67,7 +67,7 @@ def ai_vs_ai(ai1, ai2, reversi=None, round_num=100, random_turn=0, verbose=0):
     
     return black_win, white_win, round_num-black_win-white_win
 
-def randomize_board(reversi, turn=8):
+def randomize_board(reversi, turn=2):
     prev_valid = True
     for _ in range(turn):
         if len(reversi.black_pieces)+len(reversi.white_pieces) >= 64:
