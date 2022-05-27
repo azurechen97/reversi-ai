@@ -17,8 +17,8 @@ Course project for Learning in Games.
 - [x] Simple AI (by 5/5)
     - [x] Count flipped pieces
     - [x] Find the move with most pieces converted
-- [x] Advanced AI (by 5/17) (90%)
-    - [x] Evaluation (70%)
+- [x] Advanced AI (by 5/17)
+    - [x] Evaluation
         - [x] Number of pieces
         - [x] Position scores
         - [x] Possible moves
@@ -26,7 +26,7 @@ Course project for Learning in Games.
         - [x] Special situations
     - [x] MinMax algorithm
     - [x] Alpha-Beta pruning
-- [ ] More advanced features (by 5/24)
+- [ ] More advanced features (by 5/24) (20%)
     - [ ] Transposition table
     - [ ] Killer moves
     - [ ] Iterative deepening
