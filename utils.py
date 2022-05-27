@@ -1,9 +1,10 @@
 from ai import *
 from environment import *
 import time
+import random
 
 
-def ai_vs_ai(ai1, ai2, reversi=None, round_num=100, verbose=0):
+def ai_vs_ai(ai1, ai2, reversi=None, round_num=100, random_turn=0, verbose=0):
     # verbose = 0: Nothing
     # verbose = 1: Round number, result
     # verbose = 2: Detailed moves
@@ -17,6 +18,8 @@ def ai_vs_ai(ai1, ai2, reversi=None, round_num=100, verbose=0):
     time_list = []
 
     for i in range(round_num):
+        if random_turn>0:
+            randomize_board(reversi, turn=random_turn)
         if verbose>0:
             print("Round",i)
         if verbose>1:
@@ -81,3 +84,32 @@ def ai_vs_ai(ai1, ai2, reversi=None, round_num=100, verbose=0):
         print('Average branch factor = ', round(np.mean(branch_factor_list),2), 'time = ', round(np.mean(time_list), 5), ' s')
     
     return black_win, white_win, round_num-black_win-white_win
+
+def randomize_board(reversi, turn=8):
+    prev_valid = True
+    for _ in range(turn):
+        if len(reversi.black_pieces)+len(reversi.white_pieces) >= 64:
+            reversi.game_over(hint=False)
+            break
+
+        valid_moves = reversi.find_valid_moves()
+        if len(valid_moves) == 0:
+            if not prev_valid:
+                reversi.game_over(hint=False)
+                break
+            prev_valid = False
+            reversi.current_player = -reversi.current_player
+            continue
+        prev_valid = True
+
+        best_move = random.choice(list(valid_moves.keys()))
+
+        reversi.make_move(
+            best_move[0], best_move[1], False, False)
+    return reversi
+
+def shuffle_two_lists(a,b):
+    c = list(zip(a, b))
+    random.shuffle(c)
+    a, b = zip(*c)
+    return a, b

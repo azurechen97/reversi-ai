@@ -4,6 +4,7 @@ import numpy as np
 from environment import *
 from evaluation import Score, ScoreAdvanced
 import random
+from utils import *
 
 class ReversiAI:
     def __init__(self, ai_color=-1) -> None:
@@ -135,6 +136,8 @@ class NormalAI(ReversiAI):
 
         val = float("-inf") if tree.maximizing_player > 0 else float("+inf")
         ret_m = None
+        # randomize order
+        tree.children, tree.moves = shuffle_two_lists(tree.children, tree.moves)
         for i, subtree in enumerate(tree.children):
             sub_val, _ = self.pruning(subtree, metrics, alpha, beta, depth=depth-1)
             if tree.maximizing_player > 0:
@@ -199,6 +202,9 @@ class HardAI(ReversiAI):
 
         val = float("-inf") if tree.maximizing_player > 0 else float("+inf")
         ret_m = None
+        # randomize order
+        tree.children, tree.moves = shuffle_two_lists(
+            tree.children, tree.moves)
         for i, subtree in enumerate(tree.children):
             sub_val, _ = self.pruning(
                 subtree, metrics, alpha, beta, depth=depth-1)
