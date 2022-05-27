@@ -151,7 +151,7 @@ class NormalAI(ReversiAI):
 
     def find_best_move(self, reversi, valid_moves=None):
         metrics = Score(self.score_method, self.score_weight)
-        tree = Tree(reversi, maximizing_player=self.ai_color)
+        tree = Tree(reversi, maximizing_player=reversi.current_player)
         _, move = self.pruning(tree, metrics, depth=self.search_depth)
         return move
 
@@ -216,7 +216,7 @@ class HardAI(ReversiAI):
 
     def find_best_move(self, reversi, valid_moves=None):
         metrics = ScoreAdvanced(self.score_method, self.score_weight)
-        tree = Tree(reversi, maximizing_player=self.ai_color)
+        tree = Tree(reversi, maximizing_player=reversi.current_player)
         _, move = self.pruning(tree, metrics, depth=self.search_depth)
         return move
 
