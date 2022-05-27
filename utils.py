@@ -10,9 +10,6 @@ def ai_vs_ai(ai1, ai2, reversi=None, round_num=100, verbose=0):
     # verbose = 3: Print board
     if reversi is None:
         reversi = Reversi()
-    
-    ai1.ai_color = 1
-    ai2.ai_color = -1
 
     black_win = 0
     white_win = 0

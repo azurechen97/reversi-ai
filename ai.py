@@ -7,7 +7,7 @@ import random
 
 class ReversiAI:
     def __init__(self, ai_color=-1) -> None:
-        self.ai_color = ai_color
+        self.ai_color = ai_color # only useful for Human vs AI
 
     def find_best_move(self, reversi, valid_moves=None):
         pass
